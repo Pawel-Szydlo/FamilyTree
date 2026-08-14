@@ -14,18 +14,37 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { LogoutButton } from "@/features/auth/components/logout-button";
 import { cn } from "@/lib/utils";
 
-const navigation = [
-  { href: "/family/demo/tree", label: "Drzewo", icon: GitBranch },
-  { href: "/family/demo/calendar", label: "Kalendarz", icon: CalendarDays },
-  { href: "/family/demo/memories", label: "Wspomnienia", icon: BookHeart },
-  { href: "/family/demo/settings", label: "Ustawienia", icon: Settings },
-];
+type NavigationProps = { familyId: string; familyName: string; email: string };
 
-export function AppNavigation() {
+export function AppNavigation({
+  familyId,
+  familyName,
+  email,
+}: NavigationProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const navigation = [
+    { href: `/family/${familyId}/tree`, label: "Drzewo", icon: GitBranch },
+    {
+      href: `/family/${familyId}/calendar`,
+      label: "Kalendarz",
+      icon: CalendarDays,
+    },
+    {
+      href: `/family/${familyId}/memories`,
+      label: "Wspomnienia",
+      icon: BookHeart,
+    },
+    {
+      href: `/family/${familyId}/settings`,
+      label: "Ustawienia",
+      icon: Settings,
+    },
+  ];
+  const initials = email.slice(0, 2).toUpperCase();
 
   return (
     <>
@@ -45,7 +64,7 @@ export function AppNavigation() {
               <p className="text-xs text-sidebar-foreground/65">
                 Aktywna rodzina
               </p>
-              <p className="font-medium">Kowalscy</p>
+              <p className="truncate font-medium">{familyName}</p>
             </div>
           </div>
           <button
@@ -79,15 +98,16 @@ export function AppNavigation() {
         <div className="mt-auto border-t border-sidebar-border pt-5">
           <div className="flex items-center gap-3 px-2">
             <div className="grid size-9 place-items-center rounded-full bg-sidebar-primary/20 text-sm">
-              AK
+              {initials}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium">Anna Kowalska</p>
+              <p className="truncate text-sm font-medium">{email}</p>
               <p className="text-xs text-sidebar-foreground/60">
-                Członek rodziny
+                Zalogowany użytkownik
               </p>
             </div>
           </div>
+          <LogoutButton />
         </div>
       </aside>
       <header className="flex items-center justify-between border-b border-border bg-background/85 px-4 py-4 backdrop-blur lg:hidden">
@@ -131,10 +151,19 @@ export function AppNavigation() {
   );
 }
 
-export function FamilyShell({ children }: { children: ReactNode }) {
+export function FamilyShell({
+  children,
+  familyId,
+  familyName,
+  email,
+}: NavigationProps & { children: ReactNode }) {
   return (
     <div className="min-h-screen lg:flex">
-      <AppNavigation />
+      <AppNavigation
+        familyId={familyId}
+        familyName={familyName}
+        email={email}
+      />
       <main className="min-w-0 flex-1">{children}</main>
     </div>
   );

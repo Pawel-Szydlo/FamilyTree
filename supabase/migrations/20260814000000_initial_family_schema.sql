@@ -435,3 +435,11 @@ create policy notification_preferences_update_self_or_admin on public.notificati
 create policy notification_preferences_delete_self_or_admin on public.notification_preferences for delete using (user_id = auth.uid() or public.has_family_role(family_id, array['owner', 'admin']::public.family_member_role[]));
 
 create policy notification_logs_select_recipient_or_admin on public.notification_logs for select using (recipient_user_id = auth.uid() or public.has_family_role(family_id, array['owner', 'admin']::public.family_member_role[]));
+
+-- The current Supabase CLI defaults to not auto-exposing new public tables.
+-- Grant the authenticated role the SQL privileges required to reach RLS policies;
+-- the policies above remain the authorization boundary.
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+grant execute on function public.is_family_member(uuid) to authenticated;
+grant execute on function public.has_family_role(uuid, public.family_member_role[]) to authenticated;

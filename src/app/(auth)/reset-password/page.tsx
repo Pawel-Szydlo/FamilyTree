@@ -1,31 +1,22 @@
 import { ArrowLeft, Heart } from "lucide-react";
 import Link from "next/link";
-import { AuthForm } from "@/features/auth/components/auth-form";
+import { UpdatePasswordForm } from "@/features/auth/components/update-password-form";
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ next?: string }>;
-}) {
-  const { next } = await searchParams;
+export default function ResetPasswordPage() {
   return (
     <main className="flex min-h-screen items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
         <Link
-          href="/"
+          href="/login"
           className="mb-10 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
         >
-          <ArrowLeft className="size-4" /> Wróć do strony głównej
+          <ArrowLeft className="size-4" /> Wróć do logowania
         </Link>
         <div className="rounded-3xl border border-border bg-card p-7 shadow-xl shadow-primary/5 sm:p-9">
           <div className="mb-8 grid size-12 place-items-center rounded-2xl bg-primary text-primary-foreground">
             <Heart className="size-6 fill-current" />
           </div>
-          <AuthForm redirectTo={next} />
-          <p className="mt-7 rounded-xl bg-secondary/60 p-3 text-xs leading-5 text-muted-foreground">
-            Twoje rodzinne dane pozostają prywatne i są dostępne tylko dla
-            zaproszonych osób.
-          </p>
+          <UpdatePasswordForm />
         </div>
       </div>
     </main>
