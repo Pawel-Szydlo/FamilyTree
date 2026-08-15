@@ -7,6 +7,7 @@ import {
   Heart,
   Menu,
   Settings,
+  Users,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -28,6 +29,7 @@ export function AppNavigation({
   const [open, setOpen] = useState(false);
   const navigation = [
     { href: `/family/${familyId}/tree`, label: "Drzewo", icon: GitBranch },
+    { href: `/family/${familyId}/people`, label: "Osoby", icon: Users },
     {
       href: `/family/${familyId}/calendar`,
       label: "Kalendarz",
