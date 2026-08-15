@@ -24,7 +24,7 @@ Jeżeli repozytorium nie ma jeszcze lokalnej konfiguracji CLI, można wykonać p
 
 ## Buckety Storage
 
-Bucket zdjęć powinien zostać utworzony jako prywatny, np. `family-photos`. Wartość `photos.storage_path` ma zaczynać się od `family_id/`, a signed URLs należy generować po stronie serwera. Polityki Storage powinny sprawdzać członkostwo w `family_members`; nie używaj publicznego bucketa.
+Migracja `20260815020000_private_memories_storage.sql` tworzy prywatny bucket `family-private`. Wartość `photos.storage_path` zaczyna się od `family_id/`, a signed URLs są generowane po stronie serwera. Polityki Storage sprawdzają członkostwo oraz widoczność rekordu zdjęcia; nie używaj publicznego bucketa.
 
 ## Semantyka prywatności
 

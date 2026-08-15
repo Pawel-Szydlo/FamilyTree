@@ -4,7 +4,7 @@ Prywatna aplikacja do rodzinnego drzewa genealogicznego, zdjęć i wspomnień.
 
 ## Status
 
-Etap 03 — auth i onboarding. Aplikacja ma responsywny shell, Supabase SSR Auth, ochronę tras rodzinnych oraz tworzenie i wybór rodzin. Kolejne etapy podłączą dane osób i relacje do widoków.
+Etap 07 — osoby, relacje, interaktywne drzewo oraz prywatne zdjęcia i wspomnienia.
 
 ## Supabase Auth lokalnie
 

@@ -222,8 +222,25 @@ export async function deleteMemory(
       .eq("id", memory.photo_id)
       .maybeSingle();
     path = photo.data?.storage_path ?? null;
-    if (path) await supabase.storage.from(PRIVATE_BUCKET).remove([path]);
-    await supabase.from("photos").delete().eq("id", memory.photo_id);
+    if (path) {
+      const removed = await supabase.storage
+        .from(PRIVATE_BUCKET)
+        .remove([path]);
+      if (
+        removed.error &&
+        !removed.error.message.toLowerCase().includes("not found")
+      )
+        return { error: "Nie udało się usunąć pliku zdjęcia." };
+    }
+    const deletedPhoto = await supabase
+      .from("photos")
+      .delete()
+      .eq("id", memory.photo_id);
+    if (deletedPhoto.error)
+      return friendlyError(
+        "Nie udało się usunąć rekordu zdjęcia.",
+        deletedPhoto.error,
+      );
   }
   const deleted = await supabase
     .from("memories")

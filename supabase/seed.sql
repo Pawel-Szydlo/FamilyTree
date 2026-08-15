@@ -1,0 +1,1 @@
+-- Intentionally empty. Tests and local development create data through Auth and the app.

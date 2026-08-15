@@ -21,6 +21,39 @@ const typeLabel = {
   event: "Wydarzenie",
 } as const;
 
+function SignedMemoryImage({
+  url,
+  className,
+}: {
+  url: string;
+  className: string;
+}) {
+  const router = useRouter();
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    if (!failed) return;
+    const timer = window.setTimeout(() => router.refresh(), 250);
+    return () => window.clearTimeout(timer);
+  }, [failed, router]);
+  if (failed)
+    return (
+      <div
+        className={`${className} grid place-items-center bg-secondary text-sm text-muted-foreground`}
+      >
+        Odświeżanie zdjęcia…
+      </div>
+    );
+  return (
+    // biome-ignore lint/performance/noImgElement: signed URLs cannot be statically configured for next/image.
+    <img
+      src={url}
+      alt=""
+      className={className}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 function MemoryForm({
   familyId,
   people,
@@ -154,9 +187,9 @@ function MemoryCard({
       className="group overflow-hidden rounded-3xl border border-border bg-card text-left shadow-sm transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg"
     >
       {memory.photo?.signed_url ? (
-        <div
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${memory.photo.signed_url})` }}
+        <SignedMemoryImage
+          url={memory.photo.signed_url}
+          className="h-48 w-full object-cover"
         />
       ) : (
         <div className="grid h-48 place-items-center bg-secondary/70 text-primary">
@@ -248,9 +281,9 @@ function MemoryDetails({
           </Button>
         </div>
         {memory.photo?.signed_url && (
-          <div
-            className="mt-6 aspect-video rounded-2xl bg-cover bg-center"
-            style={{ backgroundImage: `url(${memory.photo.signed_url})` }}
+          <SignedMemoryImage
+            url={memory.photo.signed_url}
+            className="mt-6 aspect-video w-full rounded-2xl object-cover"
           />
         )}
         {memory.body && (
