@@ -1,6 +1,7 @@
 "use client";
 
 import { Archive, Pencil, Plus, Search, UserRound, X } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { archivePerson } from "../actions";
@@ -226,9 +227,14 @@ function PersonDetails({
       <div className="rounded-2xl border border-dashed border-border p-4">
         <h3 className="font-semibold text-primary">Relacje</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Miejsce na rodziców, partnerów i dzieci — zostanie uzupełnione w
-          kolejnym etapie.
+          Zarządzaj rodzicami, partnerami i dziećmi w osobnym widoku relacji.
         </p>
+        <Link
+          href={`/family/${person.family_id}/relationships`}
+          className="mt-3 inline-block text-sm font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Otwórz relacje
+        </Link>
       </div>
       {message && (
         <p role="alert" className="text-sm text-destructive">

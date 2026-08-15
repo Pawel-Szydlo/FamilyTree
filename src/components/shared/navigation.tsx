@@ -31,6 +31,11 @@ export function AppNavigation({
     { href: `/family/${familyId}/tree`, label: "Drzewo", icon: GitBranch },
     { href: `/family/${familyId}/people`, label: "Osoby", icon: Users },
     {
+      href: `/family/${familyId}/relationships`,
+      label: "Relacje",
+      icon: GitBranch,
+    },
+    {
       href: `/family/${familyId}/calendar`,
       label: "Kalendarz",
       icon: CalendarDays,
