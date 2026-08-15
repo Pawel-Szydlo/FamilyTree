@@ -138,3 +138,71 @@ button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
+
+.tree-canvas .react-flow__controls {
+  border: 1px solid var(--border);
+  overflow: hidden;
+  border-radius: 0.85rem;
+  box-shadow: 0 4px 20px oklch(0.25 0.03 150 / 0.08);
+}
+
+.tree-canvas .react-flow__controls-button,
+.tree-canvas .react-flow__minimap {
+  border-color: var(--border);
+  background: var(--card);
+  fill: var(--primary);
+}
+
+.tree-person-node {
+  width: 220px;
+  border: 1px solid var(--border);
+  border-radius: 1.1rem;
+  background: var(--card);
+  padding: 0.75rem;
+  box-shadow: 0 8px 24px oklch(0.25 0.03 150 / 0.08);
+}
+
+.tree-person-node-active {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px oklch(0.33 0.09 150 / 0.12),
+    0 10px 28px oklch(0.25 0.03 150 / 0.13);
+}
+
+.tree-person-node-highlighted {
+  outline: 3px solid var(--accent);
+}
+
+.tree-partnership-node {
+  display: flex;
+  width: 72px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border: 2px solid var(--primary);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--primary);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.tree-canvas .react-flow__edge-textbg {
+  fill: var(--card);
+}
+.tree-canvas .react-flow__edge-text {
+  fill: var(--primary);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+.tree-canvas .tree-edge-adoptive path {
+  stroke: oklch(0.55 0.16 250);
+  stroke-dasharray: 6 4;
+}
+.tree-canvas .tree-edge-foster path,
+.tree-canvas .tree-edge-guardian path {
+  stroke: oklch(0.55 0.14 50);
+  stroke-dasharray: 2 4;
+}
