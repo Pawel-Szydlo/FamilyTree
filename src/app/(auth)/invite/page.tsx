@@ -1,6 +1,7 @@
 import { ArrowLeft, Mail } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { getCurrentUser } from "@/features/families/queries";
 import { InvitationForm } from "@/features/invitations/components/invitation-form";
 
 export default async function InvitePage({
@@ -9,6 +10,7 @@ export default async function InvitePage({
   searchParams: Promise<{ token?: string }>;
 }) {
   const { token } = await searchParams;
+  const user = await getCurrentUser();
   return (
     <main className="flex min-h-screen items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
@@ -28,13 +30,13 @@ export default async function InvitePage({
           <p className="mt-2 text-muted-foreground">
             Dołącz do prywatnej rodziny po zalogowaniu.
           </p>
-          {token ? (
+          {token && user ? (
             <div className="mt-8">
               <InvitationForm token={token} />
             </div>
           ) : (
             <Link
-              href="/login"
+              href={`/login?next=${encodeURIComponent(token ? `/invite?token=${token}` : "/invite")}`}
               className={`${buttonVariants({ variant: "outline" })} mt-8 w-full`}
             >
               Przejdź do logowania

@@ -1,6 +1,10 @@
 import { notFound, redirect } from "next/navigation";
 import { FamilyShell } from "@/components/shared/navigation";
-import { getCurrentUser, getFamilyById } from "@/features/families/queries";
+import {
+  getCurrentUser,
+  getFamilies,
+  getFamilyById,
+} from "@/features/families/queries";
 
 export default function FamilyLayout({
   children,
@@ -23,7 +27,10 @@ async function FamilyLayoutContent({
   const user = await getCurrentUser();
   if (!user) redirect(`/login?next=/family/${familyId}/tree`);
 
-  const family = await getFamilyById(familyId);
+  const [family, families] = await Promise.all([
+    getFamilyById(familyId),
+    getFamilies(),
+  ]);
   if (!family) notFound();
 
   return (
@@ -31,6 +38,7 @@ async function FamilyLayoutContent({
       familyId={family.id}
       familyName={family.name}
       email={user.email ?? "Użytkownik"}
+      families={families}
     >
       {children}
     </FamilyShell>

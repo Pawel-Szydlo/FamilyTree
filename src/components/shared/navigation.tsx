@@ -16,14 +16,21 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LogoutButton } from "@/features/auth/components/logout-button";
+import type { FamilySummary } from "@/features/families/queries";
 import { cn } from "@/lib/utils";
 
-type NavigationProps = { familyId: string; familyName: string; email: string };
+type NavigationProps = {
+  familyId: string;
+  familyName: string;
+  email: string;
+  families: FamilySummary[];
+};
 
 export function AppNavigation({
   familyId,
   familyName,
   email,
+  families,
 }: NavigationProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -74,12 +81,20 @@ export function AppNavigation({
               <p className="truncate font-medium">{familyName}</p>
             </div>
           </div>
-          <button
-            type="button"
-            className="mt-3 text-xs text-sidebar-foreground/65 transition hover:text-sidebar-foreground"
-          >
-            Przełącz rodzinę
-          </button>
+          {families.length > 1 && (
+            <div className="mt-3 space-y-1 border-t border-sidebar-border pt-3">
+              {families.map((family) => (
+                <Link
+                  key={family.id}
+                  href={`/family/${family.id}/tree`}
+                  className="block truncate text-xs text-sidebar-foreground/65 transition hover:text-sidebar-foreground"
+                >
+                  {family.id === familyId ? "✓ " : ""}
+                  {family.name}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
         <nav className="mt-8 space-y-1">
           {navigation.map((item) => {
@@ -163,6 +178,7 @@ export function FamilyShell({
   familyId,
   familyName,
   email,
+  families,
 }: NavigationProps & { children: ReactNode }) {
   return (
     <div className="min-h-screen lg:flex">
@@ -170,6 +186,7 @@ export function FamilyShell({
         familyId={familyId}
         familyName={familyName}
         email={email}
+        families={families}
       />
       <main className="min-w-0 flex-1">{children}</main>
     </div>
