@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getFamilyById } from "@/features/families/queries";
 import { createClient } from "@/lib/supabase/server";
+import { consumeRateLimit } from "../../lib/security/rate-limit";
 import { sendInvitationEmail } from "./mailer";
 import { createInvitationSchema, type InvitationRole } from "./schema";
 import {
@@ -47,6 +48,14 @@ export async function createInvitation(
   );
   if (!user || !allowed)
     return { error: "Nie masz uprawnień do zapraszania członków." };
+  if (
+    !consumeRateLimit(
+      `invite:${user.id}:${parsed.data.family_id}`,
+      10,
+      60 * 60 * 1000,
+    )
+  )
+    return { error: "Osiągnięto limit zaproszeń. Spróbuj później." };
   const family = await getFamilyById(parsed.data.family_id);
   if (!family) return { error: "Rodzina nie istnieje." };
   const token = createInvitationToken();

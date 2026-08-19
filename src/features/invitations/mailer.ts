@@ -1,5 +1,15 @@
 import { Resend } from "resend";
 
+function escapeHtml(value: string) {
+  return value.replace(
+    /[&<>"']/g,
+    (character) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        character
+      ] ?? character,
+  );
+}
+
 export async function sendInvitationEmail(input: {
   recipient: string;
   familyName: string;
@@ -12,12 +22,13 @@ export async function sendInvitationEmail(input: {
     throw new Error("Invitation email is not configured.");
   }
   const inviteUrl = `${appUrl.replace(/\/$/, "")}/invite?token=${encodeURIComponent(input.token)}`;
+  const safeFamilyName = escapeHtml(input.familyName);
   const result = await new Resend(apiKey).emails.send({
     from: sender,
     to: input.recipient,
     subject: `Zaproszenie do rodziny ${input.familyName}`,
     text: `Zaproszono Cię do rodziny ${input.familyName}. Otwórz: ${inviteUrl}`,
-    html: `<p>Zaproszono Cię do rodziny <strong>${input.familyName}</strong>.</p><p><a href="${inviteUrl}">Akceptuj zaproszenie</a></p><p>Link wygasa za 7 dni.</p>`,
+    html: `<p>Zaproszono Cię do rodziny <strong>${safeFamilyName}</strong>.</p><p><a href="${inviteUrl}">Akceptuj zaproszenie</a></p><p>Link wygasa za 7 dni.</p>`,
   });
   if (result.error) throw new Error("Invitation email was rejected.");
 }

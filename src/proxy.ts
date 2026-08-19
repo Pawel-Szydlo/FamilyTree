@@ -4,8 +4,8 @@ import { updateSession } from "@/lib/supabase/proxy";
 export async function proxy(request: NextRequest) {
   try {
     return await updateSession(request);
-  } catch (error) {
-    console.error("Supabase proxy failed", error);
+  } catch {
+    console.error("Supabase proxy failed");
 
     if (request.nextUrl.pathname.startsWith("/family")) {
       const url = request.nextUrl.clone();

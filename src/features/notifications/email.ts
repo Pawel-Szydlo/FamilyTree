@@ -28,19 +28,31 @@ export function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function escapeHtml(value: string) {
+  return value.replace(
+    /[&<>"']/g,
+    (character) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        character
+      ] ?? character,
+  );
+}
+
 export function renderBirthdayEmail(input: BirthdayEmail) {
   const date = formatBirthday(input.month, input.day);
+  const safePersonName = escapeHtml(input.personName);
+  const safeFamilyName = escapeHtml(input.familyName);
   const subject =
     input.type === "birthday_today"
-      ? `Dzisiaj urodziny: ${input.personName}`
-      : `Urodziny za 7 dni: ${input.personName}`;
+      ? `Dzisiaj urodziny: ${safePersonName}`
+      : `Urodziny za 7 dni: ${safePersonName}`;
   const intro =
     input.type === "birthday_today"
-      ? `Dzisiaj przypadają urodziny osoby ${input.personName}.`
+      ? `Dzisiaj przypadają urodziny osoby ${safePersonName}.`
       : "Za 7 dni, " +
         date +
         ", przypadają urodziny osoby " +
-        input.personName +
+        safePersonName +
         ".";
   return {
     subject,
@@ -50,14 +62,14 @@ export function renderBirthdayEmail(input: BirthdayEmail) {
       "</h1><p>" +
       intro +
       "</p><p>Rodzina: " +
-      input.familyName +
+      safeFamilyName +
       "</p><p>Strefa dat: " +
       FAMILY_TIME_ZONE +
       ".</p></main>",
     text:
       intro +
       " Rodzina: " +
-      input.familyName +
+      safeFamilyName +
       ". Strefa dat: " +
       FAMILY_TIME_ZONE +
       ".",

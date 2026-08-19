@@ -58,4 +58,14 @@ describe("birthday emails", () => {
       sendBirthdayEmail({ ...input, type: "birthday_today" }),
     ).rejects.toThrow("Resend rejected the message.");
   });
+
+  it("escapes untrusted names in HTML templates", () => {
+    const message = renderBirthdayEmail({
+      ...input,
+      personName: "<script>alert(1)</script>",
+      type: "birthday_today",
+    });
+    expect(message.html).not.toContain("<script>");
+    expect(message.html).toContain("&lt;script&gt;");
+  });
 });

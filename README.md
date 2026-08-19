@@ -52,4 +52,12 @@ Prettier nie jest używany. Strukturę projektu organizują feature’y w `src/f
 - `/family/demo/memories` — widok wspomnień,
 - `/family/demo/settings` — ustawienia rodziny.
 
+## Bezpieczeństwo i ograniczenia lokalnej weryfikacji
+
+Mutacje używają Next Server Actions, które sprawdzają metodę POST i origin; endpointy HTTP mają niezależne zabezpieczenia (`CRON_SECRET`, membership i rate limiting). Klucz `SUPABASE_SERVICE_ROLE_KEY` jest używany wyłącznie w kodzie serwerowym do zadań administracyjnych i nigdy nie trafia do komponentu klienta.
+
+Rate limiting w aplikacji jest lokalnym, procesowym bezpiecznikiem. Na wdrożeniu wieloinstancyjnym należy zastąpić go limitem współdzielonym (np. Redis/Edge Config), a ochronę auth i RLS pozostawić w Supabase.
+
+Testy RLS/Storage wymagają uruchomionej instancji Supabase z rolami `anon`/`authenticated`; lokalne testy Vitest mockują granicę klienta i nie potwierdzają polityk w prawdziwym Postgresie. Przed wdrożeniem uruchom migracje i scenariusze dla obcej rodziny, viewer/editor/admin/owner oraz prywatnych zdjęć.
+
 Pełny plan i sekwencyjne prompty znajdują się w katalogu [`plans/`](./plans/).

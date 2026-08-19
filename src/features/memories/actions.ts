@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { consumeRateLimit } from "../../lib/security/rate-limit";
 import {
   contentHash,
   extensionForType,
@@ -100,6 +101,14 @@ export async function createMemory(
   const { supabase, user, allowed } = await authorize(parsed.data.family_id);
   if (!user) return { error: "Sesja wygasła. Zaloguj się ponownie." };
   if (!allowed) return { error: "Nie masz uprawnień do dodawania wspomnień." };
+  if (
+    !consumeRateLimit(
+      `memory-upload:${user.id}:${parsed.data.family_id}`,
+      20,
+      60 * 60 * 1000,
+    )
+  )
+    return { error: "Osiągnięto limit uploadów. Spróbuj później." };
   if (
     !(await peopleBelongToFamily(
       supabase,

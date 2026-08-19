@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { sendBirthdayNotifications } from "@/features/notifications/dispatcher";
+import { consumeRateLimit } from "../../../../lib/security/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,9 @@ export async function GET(request: Request) {
   }
   if (!authorized(request)) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+  if (!consumeRateLimit("birthday-cron", 2, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: "Too many requests." }, { status: 429 });
   }
   try {
     const result = await sendBirthdayNotifications();

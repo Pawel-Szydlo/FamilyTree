@@ -6,6 +6,7 @@ import {
   toExportJson,
   toPeopleCsv,
 } from "../../../../../features/export/format";
+import { consumeRateLimit } from "../../../../../lib/security/rate-limit";
 
 const MAX_ZIP_BYTES = 50 * 1024 * 1024;
 
@@ -22,6 +23,16 @@ export async function GET(
   { params }: { params: Promise<{ familyId: string }> },
 ) {
   const { familyId } = await params;
+  const forwardedFor =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (
+    !consumeRateLimit(`export:${forwardedFor}:${familyId}`, 5, 60 * 60 * 1000)
+  ) {
+    return NextResponse.json(
+      { error: "Osiągnięto limit eksportów." },
+      { status: 429 },
+    );
+  }
   const format = new URL(request.url).searchParams.get("format") ?? "json";
   if (!["json", "csv", "zip"].includes(format)) {
     return NextResponse.json(
