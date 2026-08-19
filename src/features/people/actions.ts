@@ -144,3 +144,62 @@ export async function archivePerson(
   revalidatePath(`/family/${familyId}/tree`);
   return { success: "Osoba została przeniesiona do archiwum." };
 }
+
+/**
+ * Anonymization keeps relationship rows and the stable person id, but removes
+ * identifying fields and archives the person. This preserves graph integrity
+ * without retaining personal data in an export.
+ */
+export async function anonymizePerson(
+  _previous: PersonActionState,
+  formData: FormData,
+): Promise<PersonActionState> {
+  const familyId = String(formData.get("family_id") ?? "");
+  const personId = String(formData.get("person_id") ?? "");
+  const expectedUpdatedAt = String(formData.get("expected_updated_at") ?? "");
+  const { supabase, user } = await authorize(familyId);
+  if (!user) return { error: "Sesja wygasła. Zaloguj się ponownie." };
+  const membership = await supabase
+    .from("family_members")
+    .select("role")
+    .eq("family_id", familyId)
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .maybeSingle();
+  if (!membership.data || !["owner", "admin"].includes(membership.data.role)) {
+    return { error: "Tylko owner lub administrator może anonimizować osoby." };
+  }
+  const { data, error } = await supabase
+    .from("people")
+    .update({
+      first_name: "Osoba",
+      last_name: "zanonimizowana",
+      preferred_name: null,
+      biography: null,
+      avatar_path: null,
+      birth_day: null,
+      birth_month: null,
+      birth_year: null,
+      birth_year_visible: false,
+      is_living: false,
+      is_placeholder: true,
+      privacy_level: "private",
+      archived_at: new Date().toISOString(),
+      archived_by: user.id,
+      anonymized_at: new Date().toISOString(),
+      anonymized_by: user.id,
+    })
+    .eq("id", personId)
+    .eq("family_id", familyId)
+    .eq("updated_at", expectedUpdatedAt)
+    .is("archived_at", null)
+    .select("id")
+    .maybeSingle();
+  if (error) return { error: "Nie udało się zanonimizować osoby." };
+  if (!data) return { error: "Osoba została zmieniona przez kogoś innego." };
+  revalidatePath(`/family/${familyId}/people`);
+  revalidatePath(`/family/${familyId}/tree`);
+  revalidatePath(`/family/${familyId}/relationships`);
+  revalidatePath(`/family/${familyId}/memories`);
+  return { success: "Osoba została zanonimizowana i zarchiwizowana." };
+}

@@ -38,7 +38,7 @@ export async function getRelationshipData(familyId: string) {
   const [peopleResult, partnershipsResult, membersResult, linksResult] =
     await Promise.all([
       supabase
-        .from("people")
+        .from("people_visible")
         .select(
           "id, family_id, first_name, last_name, preferred_name, biography, avatar_path, birth_day, birth_month, birth_year, birth_year_visible, is_living, is_placeholder, privacy_level, archived_at, updated_at",
         )

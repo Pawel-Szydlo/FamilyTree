@@ -36,6 +36,33 @@ export default async function SettingsPage({
             Dane żyjących osób będą dostępne wyłącznie dla zaproszonej rodziny.
           </p>
         </section>
+        <section className="mt-5 rounded-3xl border border-border bg-card p-6">
+          <h2 className="font-semibold text-primary">Eksport danych</h2>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Eksport obejmuje wyłącznie dane, do których masz dostęp. Prywatne
+            ścieżki Storage i podpisane URL-e nie są ujawniane.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2 text-sm">
+            <a
+              className="rounded-xl border border-border px-3 py-2 hover:border-primary"
+              href={`/api/family/${familyId}/export?format=json`}
+            >
+              JSON
+            </a>
+            <a
+              className="rounded-xl border border-border px-3 py-2 hover:border-primary"
+              href={`/api/family/${familyId}/export?format=csv`}
+            >
+              CSV
+            </a>
+            <a
+              className="rounded-xl border border-border px-3 py-2 hover:border-primary"
+              href={`/api/family/${familyId}/export?format=zip`}
+            >
+              ZIP ze zdjęciami
+            </a>
+          </div>
+        </section>
       </div>
     </div>
   );

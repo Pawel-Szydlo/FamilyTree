@@ -1,10 +1,18 @@
 "use client";
 
-import { Archive, Pencil, Plus, Search, UserRound, X } from "lucide-react";
+import {
+  Archive,
+  Pencil,
+  Plus,
+  Search,
+  ShieldAlert,
+  UserRound,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { archivePerson } from "../actions";
+import { anonymizePerson, archivePerson } from "../actions";
 import type { Person } from "../queries";
 import { PersonForm } from "./person-form";
 
@@ -179,7 +187,7 @@ function PersonDetails({
   async function archive() {
     if (
       !window.confirm(
-        "Przenieść tę osobę do archiwum? Dane pozostaną zachowane, a relacje będzie można obsłużyć w kolejnym etapie.",
+        "Przenieść tę osobę do archiwum? Relacje pozostaną zachowane.",
       )
     )
       return;
@@ -188,6 +196,21 @@ function PersonDetails({
     data.set("person_id", person.id);
     data.set("expected_updated_at", person.updated_at);
     const result = await archivePerson({}, data);
+    setMessage(result.error ?? result.success ?? "");
+    if (result.success) onArchive();
+  }
+  async function anonymize() {
+    if (
+      !window.confirm(
+        "Usunąć dane identyfikujące tę osobę? Relacje zostaną zachowane, ale tej operacji nie można cofnąć.",
+      )
+    )
+      return;
+    const data = new FormData();
+    data.set("family_id", person.family_id);
+    data.set("person_id", person.id);
+    data.set("expected_updated_at", person.updated_at);
+    const result = await anonymizePerson({}, data);
     setMessage(result.error ?? result.success ?? "");
     if (result.success) onArchive();
   }
@@ -249,6 +272,10 @@ function PersonDetails({
         <Button variant="destructive" onClick={archive}>
           <Archive />
           Archiwizuj
+        </Button>
+        <Button variant="outline" onClick={anonymize}>
+          <ShieldAlert />
+          Anonimizuj
         </Button>
       </div>
     </div>

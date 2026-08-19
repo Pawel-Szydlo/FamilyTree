@@ -79,7 +79,7 @@ export async function getMemories(familyId: string): Promise<MemoryRecord[]> {
 export async function getMemoryPeople(familyId: string): Promise<Person[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("people")
+    .from("people_visible")
     .select(
       "id, family_id, first_name, last_name, preferred_name, biography, avatar_path, birth_day, birth_month, birth_year, birth_year_visible, is_living, is_placeholder, privacy_level, archived_at, updated_at",
     )
