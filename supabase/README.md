@@ -9,6 +9,7 @@ Migracja `migrations/20260814000000_initial_family_schema.sql` tworzy bazę MVP 
 - zaproszenia, wspomnienia, zdjęcia i powiązania many-to-many,
 - preferencje oraz idempotentne logi powiadomień,
 - RLS dla każdej tabeli.
+- prywatność kolumn przez widok `people_visible`, ochronę relacji i anonimizację.
 
 ## Uruchomienie
 
@@ -41,3 +42,5 @@ Repozytorium nie ma jeszcze test harnessu SQL ani lokalnego Supabase CLI/Docker.
 5. tylko owner/admin zarządza członkami i zaproszeniami,
 6. ten sam log powiadomienia nie może zostać dodany drugi raz,
 7. powiązania osób, zdjęć, wspomnień i związków nie mogą przekraczać granicy rodziny.
+
+Po migracjach etapu 11 sprawdź dodatkowo, że zwykły członek nie widzi roku osoby żyjącej, jeśli `birth_year_visible = false`, oraz że `people_visible` nie zwraca ścieżek Storage ani danych osoby z obcej rodziny. Procedura produkcyjna znajduje się w `docs/DEPLOYMENT.md`.

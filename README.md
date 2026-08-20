@@ -4,7 +4,7 @@ Prywatna aplikacja do rodzinnego drzewa genealogicznego, zdjęć i wspomnień.
 
 ## Status
 
-Etap 07 — osoby, relacje, interaktywne drzewo oraz prywatne zdjęcia i wspomnienia.
+Etap 13 — komplet funkcji MVP, testy bezpieczeństwa i przegląd przedwdrożeniowy.
 
 ## Supabase Auth lokalnie
 
@@ -17,6 +17,8 @@ bunx supabase status
 ```
 
 W `.env.local` ustaw `NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321` oraz `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` na lokalny `PUBLISHABLE_KEY` albo `ANON_KEY`. Nie wpisuj `SERVICE_ROLE_KEY` do zmiennych z prefiksem `NEXT_PUBLIC_`.
+
+W środowisku produkcyjnym ustaw także `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `NEXT_PUBLIC_APP_URL` oraz `CRON_SECRET`. Klucz service-role dodaj wyłącznie jako sekretną zmienną serwerową.
 
 ## Uruchomienie
 
@@ -41,6 +43,8 @@ bun lint         # Biome check
 ```
 
 Prettier nie jest używany. Strukturę projektu organizują feature’y w `src/features`, a współdzielone elementy znajdują się w `src/components`, `src/lib`, `src/hooks`, `src/types` i `src/config`.
+
+Pełną konfigurację env, migracji, wdrożenia, backupu i monitoringu opisuje [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md).
 
 ## Trasy fundamentu
 
