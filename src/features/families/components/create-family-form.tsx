@@ -35,7 +35,7 @@ export function CreateFamilyForm() {
           {state.error}
         </p>
       )}
-      <Button className="h-11 w-full" disabled={pending}>
+      <Button type="submit" className="h-11 w-full" disabled={pending}>
         {pending ? "Tworzenie…" : "Utwórz rodzinę"}
       </Button>
     </form>

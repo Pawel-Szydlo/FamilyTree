@@ -58,7 +58,7 @@ export function UpdatePasswordForm() {
           {message}
         </output>
       )}
-      <Button className="h-11 w-full" disabled={pending}>
+      <Button type="submit" className="h-11 w-full" disabled={pending}>
         {pending ? <LoaderCircle className="animate-spin" /> : <LockKeyhole />}
         Ustaw nowe hasło
       </Button>

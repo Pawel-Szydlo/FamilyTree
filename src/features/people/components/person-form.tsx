@@ -167,7 +167,7 @@ export function PersonForm({
           {state.error}
         </p>
       )}
-      <Button className="w-full" disabled={pending}>
+      <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Zapisywanie…" : person ? "Zapisz zmiany" : "Dodaj osobę"}
       </Button>
     </form>

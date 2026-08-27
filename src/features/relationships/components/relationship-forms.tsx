@@ -135,7 +135,7 @@ export function PartnershipForm({
         />
       </label>
       <Feedback state={state} />
-      <Button className="w-full" disabled={pending}>
+      <Button type="submit" className="w-full" disabled={pending}>
         {pending
           ? "Zapisywanie…"
           : partnership
@@ -248,7 +248,7 @@ export function ParentLinkForm({
         </select>
       </label>
       <Feedback state={state} />
-      <Button className="w-full" disabled={pending}>
+      <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Zapisywanie…" : "Dodaj relację"}
       </Button>
     </form>

@@ -22,7 +22,7 @@ export function InvitationForm({ token }: { token: string }) {
           {state.error}
         </p>
       )}
-      <Button className="w-full" disabled={pending}>
+      <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Dołączanie…" : "Dołącz do rodziny"}
       </Button>
     </form>

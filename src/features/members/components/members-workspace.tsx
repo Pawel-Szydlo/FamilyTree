@@ -99,7 +99,7 @@ export function MembersWorkspace({
               <option value="member">Członek</option>
               <option value="viewer">Obserwator</option>
             </select>
-            <Button className="w-full" disabled={invitePending}>
+            <Button type="submit" className="w-full" disabled={invitePending}>
               {invitePending ? "Wysyłanie…" : "Wyślij zaproszenie"}
             </Button>
           </form>
@@ -141,6 +141,7 @@ export function MembersWorkspace({
                           value={invitation.id}
                         />
                         <Button
+                          type="submit"
                           variant="ghost"
                           size="sm"
                           disabled={revokePending}
@@ -203,7 +204,12 @@ function MemberRow({
               </option>
             ))}
           </select>
-          <Button size="sm" variant="outline" disabled={rolePending}>
+          <Button
+            type="submit"
+            size="sm"
+            variant="outline"
+            disabled={rolePending}
+          >
             Zapisz
           </Button>
         </form>
@@ -216,7 +222,12 @@ function MemberRow({
         >
           <input type="hidden" name="family_id" value={familyId} />
           <input type="hidden" name="user_id" value={member.user_id} />
-          <Button size="sm" variant="ghost" disabled={removePending}>
+          <Button
+            type="submit"
+            size="sm"
+            variant="ghost"
+            disabled={removePending}
+          >
             Usuń
           </Button>
         </form>

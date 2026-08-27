@@ -160,7 +160,7 @@ function MemoryForm({
           {state.error}
         </p>
       )}
-      <Button className="w-full" disabled={pending}>
+      <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Zapisywanie…" : "Dodaj wspomnienie"}
       </Button>
     </form>
@@ -318,7 +318,7 @@ function MemoryDetails({
               {state.error}
             </p>
           )}
-          <Button variant="destructive" disabled={pending}>
+          <Button type="submit" variant="destructive" disabled={pending}>
             <Trash2 />
             {pending ? "Usuwanie…" : "Usuń wspomnienie"}
           </Button>
